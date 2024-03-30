@@ -14,7 +14,7 @@ class Bot:
         return self._money
 
     def _open_position(self, date, price):
-        to_invest = self._money * 0.30 # 30% of current budget
+        to_invest = self._money * 0.3 # 30% of current budget
         if to_invest < price:
             # print(f"Not enough money, want to invest {to_invest} and price is {price}")
             return
@@ -27,3 +27,9 @@ class Bot:
             p.update(price, date)
             if p.is_closed():
                 self._money += p.earnings()
+
+    def finish(self, date, price):
+        open_positions = [p for p in self._positions if p.is_open()]
+        for p in open_positions:
+            p.force_close(price, date)
+            self._money += p.earnings()

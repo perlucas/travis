@@ -20,11 +20,11 @@ class LongPosition:
         return not self.is_open()
 
     def update(self, price, date):
-        today = datetime.strptime(date, '%m/%d/%Y').date()
-        opened_at = datetime.strptime(self._date_opened, '%m/%d/%Y').date()
-        diff = today - opened_at
-        if diff.days < 7:
-            return
+        #today = datetime.strptime(date, '%m/%d/%Y').date()
+        #opened_at = datetime.strptime(self._date_opened, '%m/%d/%Y').date()
+        #diff = today - opened_at
+        #if diff.days < 7:
+        #    return
         
         if price >= self._take_profit:
             # Raise TP and SL
@@ -36,6 +36,12 @@ class LongPosition:
             self._e_price = price
             self._notify_listener({"event": "CLOSED", "date":date, "price":price})
             print(f'Closed position, earned: {round(self.earnings(percentage_only=True)*100)}%')
+
+    def force_close(self, price, date):
+        self._is_open = False
+        self._e_price = price
+        self._notify_listener({"event": "CLOSED", "date":date, "price":price})
+        print(f'Closed position, earned: {round(self.earnings(percentage_only=True)*100)}%')
         
     def earnings(self, percentage_only=False):
         if self._is_open:
