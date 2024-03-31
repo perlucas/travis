@@ -13,6 +13,9 @@ class LongPosition:
         self._events_listener = listener
         self._notify_listener({"event": "OPEN", "date":date, "price":price})
 
+    def opened_at(self):
+        return datetime.strptime(self._date_opened, '%m/%d/%Y').date()
+    
     def is_open(self):
         return self._is_open
 
